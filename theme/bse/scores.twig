@@ -1,0 +1,92 @@
+{% include '_header.twig' %}
+
+<!-- Main Page Content and Sidebar -->
+
+    <!-- Main Blog Content -->
+    <div class="large-12 columns">
+        
+        {# Get all scores first. #}
+        {% setcontent allScores = 'scores' %}
+
+        {# Now that we have the score as an array to iterate over, create a table row for each score. #}
+        <div>
+
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
+                    <i class="fa fa-list"></i> Score Listing
+                </div>
+
+                <div class="panel-body">
+
+                    <table class="display" id="scoresTable" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <td>Song Name</td>
+                                <td>M</td>
+                                <td>D</td>
+                                <td>Player</td>
+                                <td>Score</td>
+                                <td>Status</td>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for score in allScores %}
+                                {# Before making the row, get the pack name first from the song's relation. #}
+                                {% set relatedscorecontent = score.related() %}
+                                {% set songtitle = "" %}
+                                {% set songslug = "" %}
+                                {% for relatedcontent in relatedscorecontent %}
+
+                                    {# Check that this is a song type. If it is, get the song name. #}
+                                    {% if relatedcontent.contenttype.singular_name == "Song" %}
+                                        {% set songtitle = relatedcontent.values.title %}
+                                        {% set songslug = relatedcontent.values.slug %}
+                                    {% endif %}
+                                {% endfor %}
+                                <tr>
+                                    {# Song Name #}
+                                    <td>
+                                        <a href="/songs/{{ songslug }}">{{ songtitle }}</a>
+                                    </td>
+                                    
+                                    {# Column for Game Mode #}
+                                    {% if score.gamemode == "Single" %}
+                                        <td>S</td>
+                                    {% else %}
+                                        <td>D</td>
+                                    {% endif %}
+                                    
+                                    {# Column for Difficulty Mode #}
+                                    <td>{{ score.difficultymode }}</td>
+                                    
+                                    {# Player and Score Details #}
+                                    <td>{{ score.player }}</td>
+                                    <td><a href="{{ score.link }}">{{ score.scoredetails }}</a></td>
+                                    <td>{{ score.cleared }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    {# Initialize the datatable. #}
+                    <script>
+                        $('#scoresTable').DataTable( {
+                            "pagingType": "full_numbers"
+                        } );
+                    </script>
+
+                </div> <!-- End Panel Body -->
+
+            </div>
+
+        </div>
+
+    </div>
+
+<!-- End Main Content and Sidebar -->
+
+
+
+{% include '_footer.twig' %}

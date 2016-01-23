@@ -6,19 +6,22 @@
 #
 # If you're trying out Bolt, just keep it set to SQLite for now.
 database:
-    driver: sqlite
-    databasename: bolt
+    driver: mysql
+    databasename: bse
+    username: bolt
+    password: pwpwpw
+    host: 127.0.0.1
 
 # The name of the website
-sitename: A sample site
-payoff: The amazing payoff goes here
+sitename: Batch Search Engine
+payoff: Search Submitted FFR Files
 
 # The theme to use. Be sure to copy the {theme_path}/base-2014 folder, and
 # change the name here accordingly.
 #
 # Don't edit the templates in theme/base-2014, because they _will_ get updated
 # in next releases
-theme: base-2014
+theme: bse
 
 # The locale that'll be used by the application. If no locale is set the
 # fallback locale is 'en_GB'. For available options, see:
@@ -87,7 +90,7 @@ homepage_template: index.twig
 # Note 2: If you are logged on, and debug is set to 'true', you will NOT see the
 #         404 page!
 # Note 3: This may also point to a template without a record, eg error404.twig
-notfound: page/not-found
+notfound: error404.twig
 
 # The default template and amount of records to use for listing-pages on the
 # site.

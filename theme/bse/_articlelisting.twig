@@ -1,0 +1,13 @@
+<h2>Latest News</h2>
+
+{% setcontent records = "articles/latest/5" allowpaging %}
+{% for record in records %}
+    <hr>
+    <article>
+        <h4><a href="{{ record.link }}">{{ record.title }}</a></h4>
+        <div>{{ record.body }}</div>
+        {% include '_recordfooter.twig' with {'record': record} %}
+    </article>  
+{% endfor %}
+
+{{ pager() }}

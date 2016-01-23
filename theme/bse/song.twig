@@ -1,0 +1,177 @@
+{% include '_header.twig' %}
+
+<!-- Main Page Content and Sidebar -->
+
+    <!-- Main Blog Content -->
+    <div class="large-12 columns">
+            
+        {# There should only be one related song for a scoreboard. This loop is for the array structure from relations. #}
+        {% set song = record %}
+        {% set batchtitle = "" %}
+        {% set batchslug = "" %}
+        
+        <div class="panel panel-default">
+
+            <div class="panel-heading">
+                <i class="fa fa-info-circle"></i> Song Submission
+            </div>
+
+            <div class="panel-body">
+                
+                <center>
+                    <h4><i class="fa fa-music"></i> General Song Info</h4>
+                    <p>Remember to see the Judging Info section for the file's current status.</p>
+                </center>
+                
+                {# This table displays song information. #}
+                <table class="table">
+
+                    <tbody>
+                        {# Before making the row, get the batch name first from the song's relation. #}
+                        {% set relatedsongcontent = song.related() %}
+                        {% set batchtitle = "" %}
+                        {% set batchslug = "" %}
+                        {% for relatedcontent in relatedsongcontent %}
+                            {# Check that this is a batch type. If it is, get the batch name. #}
+                            {% if relatedcontent.contenttype.singular_name == "Batch" %}
+                                {% set batchtitle = relatedcontent.values.title %}
+                                {% set batchslug = relatedcontent.values.slug %}
+                            {% endif %}
+                        {% endfor %}
+                        <tr>
+                            <td>Title</td>
+                            <td>{{ song.title }}</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Artist</td>
+                            <td>{{ song.artist }}</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Stepper</td>
+                            <td>{{ song.stepartist }}</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Batch</td>
+                            <td>
+                                <a href="/batch/{{ batchslug }}">{{ batchtitle }}</a>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Transfer</td>
+                            {% if song.transfer != "" %}
+                                <td>{{ song.transfer }}</td>
+                            {% else %}
+                                <td>No</td>
+                            {% endif %}
+                        </tr>
+                        
+                        <tr>
+                            <td>File Comments</td>
+                            <td>{{ song.filecomments }}</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+                
+                <center>
+                    <h4><i class="fa fa-gavel"></i> Judging Info</h4>
+                </center>
+                
+                {# This table shows judging information for the song. Before creating the table, we need to get the
+                   related reviews for this song. #}
+                {% set relatedReviews = song.related() %}
+                {% set reviewsArr = [] %}
+                {% for related in relatedReviews %}
+                    {% if related.contenttype.singular_name == "Review" %}
+                        {% set reviewsArr = reviewsArr|merge([related]) %}
+                    {% endif %}
+                {% endfor %}
+                
+                {# Now that we have our review in a single-element array, get the judge review data. #}
+                {% for review in reviewsArr %}
+                    <table class="table">
+
+                        <tbody>
+
+                            <tr>
+                                <td>Lead Judge</td>
+                                <td>{{ review.values.judgelead }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>Reviewer Judge</td>
+                                <td>{{ review.values.judgereviewer }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>File Review</td>
+                                <td>{{ review.values.judgenotes | raw }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>File Rating</td>
+                                <td>{{ review.values.judgerating }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>File Status</td>
+                                <td>{{ review.values.judgestatus }}</td>
+                            </tr>
+                            
+                            <tr>
+                                <td>SAP</td>
+                                <td>{{ review.values.sap }}</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                {% endfor %}
+                
+                <center>
+                    <h4><i class="fa fa-thumbs-up"></i> Permission Info</h4>
+                </center>
+                
+                {# This table shows Permission-related matters for the song submission. #}
+                <table class="table">
+
+                    <tbody>
+                        
+                        <tr>
+                            <td>Permission Status</td>
+                            <td>{{ song.permission }}</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Permission Details</td>
+                            <td>{{ song.permissiondetails }}</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Permission Image</td>
+                            {% if song.permissionimage != "" %}
+                                <td>
+                                    <img src="/files/{{ song.permissionimage }}">
+                                </td>
+                            {% else %}
+                                <td>None</td>
+                            {% endif %}
+                        </tr>
+
+                    </tbody>
+                </table>
+
+            </div> <!-- End Panel Body -->
+
+        </div>
+        
+    </div>
+
+<!-- End Main Content and Sidebar -->
+
+
+
+{% include '_footer.twig' %}

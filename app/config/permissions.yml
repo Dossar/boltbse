@@ -17,35 +17,27 @@
 # - 'anonymous': this role is automatically assigned at all times, even when
 #   no user is logged in at all.
 roles:
-    editor:
-        description: This user can edit some content.
-        label: Editor
-    chief-editor:
-        description: This user can edit any content in the system.
-        label: Chief Editor
     admin:
         description: User-level administrator.
         label: Administrator
-    developer:
-        description: Developer access. Only required to change system-level settings.
-        label: Developer
-    guest:
-        description: This user can log on, but is not allowed to edit any content.
-        label: Guest Editor
+    judge:
+        description: Judge User can create songs and reviews.
+        label: Judge
+    stepuser:
+        description: Stepartist User that can create song submissions.
+        label: Stepuser
 
 # Role hierarchy settings
 roles-hierarchy:
     # This will restrict users from being able to add, edit, enable, disable
     # and delete users with the same or higher role than their own.
     # For example:
-    # Users with a role of developer can only be added, edited, enabled, disabled
+    # Users with a role of admin can only be added, edited, enabled, disabled
     # and deleted by [ root, admin ] roles.
     manipulate:
         admin: [ ]
-        developer: [ admin ]
-        chief-editor: [ admin, developer ]
-        editor: [ admin, developer, chief-editor ]
-        guest: [ admin, developer, chief-editor ]
+        judge: [ admin ]
+        stepuser: [ admin ]
 
 
 # Now we'll define some permissions. Each permission comes with a list of roles
@@ -61,32 +53,32 @@ roles-hierarchy:
 # inside the code, so they don't appear here.
 global:
     about: [ everyone ] # view the 'About Bolt' page
-    clearcache: [ admin, developer ]
-    contentaction: [ editor, admin, developer ]
+    clearcache: [ admin ]
+    contentaction: [ stepuser, judge, admin ]
     dashboard: [ everyone ]
-    dbcheck: [ admin, developer ]
-    dbupdate: [ admin, developer ]
-    dbupdate_result: [ admin, developer ]
-    extensions: [ developer ]
-    extensions:config: [ developer ]
-    fileedit: [ admin, developer ]
-    files:config: [ developer ]
-    files:theme: [ developer ]
-    files:uploads: [ admin, developer, chief-editor, editor ]
-    files: [ admin, developer, chief-editor, editor ]
-    prefill: [ developer ]
+    dbcheck: [ admin ]
+    dbupdate: [ admin ]
+    dbupdate_result: [ admin ]
+    extensions: [ admin ]
+    extensions:config: [ admin ]
+    fileedit: [ admin ]
+    files:config: [ admin ]
+    files:theme: [ admin ]
+    files:uploads: [ admin ]
+    files: [ admin ]
+    prefill: [ admin ]
     profile: [ everyone ] # edit own profile
-    settings: [ admin, developer, everyone ]
-    translation: [ developer ]
-    useraction: [ admin, developer ] # enable/disable/delete
-    useredit: [ admin, developer ] # user settings
-    users: [ admin, developer ] # view user overview
-    roles: [ admin, developer ] # view the roles overview
+    settings: [ admin, everyone ]
+    translation: [ admin ]
+    useraction: [ admin ] # enable/disable/delete
+    useredit: [ admin ] # user settings
+    users: [ admin ] # view user overview
+    roles: [ admin ] # view the roles overview
     maintenance-mode: [ everyone ] # view the frontend when in maintenance mode
     omnisearch: [ everyone ]
     # Access to the various logs
-    changelog: [ admin, developer, chief-editor ]
-    systemlog: [ admin, developer ]
+    changelog: [ admin ]
+    systemlog: [ admin ]
     # The following permissions are particularly important: login and postLogin
     # determine who may see and use the login form. If you set them to anything
     # but 'anonymous', only users will be able to log in that are logged in
@@ -147,38 +139,26 @@ global:
 #                     in ways that may not be immediately obvious.
 # - view: allows viewing records in the backend
 contenttype-all:
-    edit: [ developer, admin, chief-editor ]
-    create: [ developer, admin, chief-editor ]
-    publish: [ developer, admin, chief-editor ]
-    depublish: [ developer, admin, chief-editor ]
-    delete: [ developer, admin ]
-    change-ownership: [ developer, admin ]
+    edit: [ admin ]
+    create: [ admin ]
+    publish: [ admin ]
+    depublish: [ admin ]
+    delete: [ admin ]
+    change-ownership: [ admin ]
+    view: [ admin ]
 
 contenttype-default:
-    edit: [ editor ]
-    create: [ editor ]
-    change-ownership: [ owner ]
-    view: [ anonymous ]
+    edit: [ owner ]
+    create: [ admin ]
+    change-ownership: [ admin ]
+    view: [ admin ]
 
 contenttypes:
-
-# This is an example of how to define Contenttype specific permissions
-#
-# contenttypes:
-#    # Keys in this dictionary map to keys in the contenttypes.yml specification.
-#    showcases:
-#        # Rules defined here *override* rules defined in contenttype-default,
-#        # but *add* to rules in contenttype-all. This means that permissions
-#        # granted through contenttype-all cannot be revoked here, merely
-#        # amended.
-#
-#        # Only the Admin and Chief Editor are allowed to edit records
-#        edit: [ admin, chief-editor ]
-#        create: [ admin, chief-editor ]
-#        publish: [ admin, chief-editor ]
-#        depublish: [ admin, chief-editor ]
-#        delete: [ admin, chief-editor ]
-#        # Roles that can see the area in the admin section
-#        view: [ developer, admin, chief-editor ]
-#        # Do not expose this content type on the front-end unless user is
-#        logged into the backend
+    songs:
+        edit: [ owner, admin ]
+        create: [ stepuser, judge ]
+        view: [ stepuser, judge ]
+    reviews:
+        edit: [ admin, judge ]
+        create: [ judge ]
+        view: [ judge ]

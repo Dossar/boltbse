@@ -1,0 +1,274 @@
+{% include '_header.twig' %}
+
+<!-- Main Page Content and Sidebar -->
+
+    <!-- Main Blog Content -->
+    <div class="large-12 columns">
+        
+        <center>
+            <p>Note that the <b>Stepartist SAP Results</b> section at the bottom is collapsed by default since it gets quite large. It shows the breakdown of submissions for each stepartist.</p>
+        </center>
+
+        {# Row for Batch Information #}
+        <div>
+
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
+                    <i class="fa fa-info-circle"></i> Batch Information
+                </div>
+
+                <div class="panel-body">
+                    
+                    <table class="table">
+
+                        <tbody>
+
+                            <tr>
+                                <td>Batch Name</td>
+                                <td>{{ record.title }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>Batch Type</td>
+                                <td>{{ record.batchtype }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>Submission Status</td>
+                                <td>{{ record.batchstatus }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>Judgments</td>
+                                <td>{{ record.batchjudgments }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>Description</td>
+                                <td>{{ record.description }}</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                </div> <!-- End Panel Body -->
+
+            </div>
+
+        </div>
+
+        {# Get all songs related to this batch. #}
+        {% set relatedsongs = record.related() %}
+
+        {# Using the songs array, obtain the status of each file and keep track of count. #}
+        {% set countReleased = 0 %}
+        {% set countAccepted = 0 %}
+        {% set countPending = 0 %}
+        {% set countCQ = 0 %}
+        {% set countRejected = 0 %}
+        {% set countJudged = 0 %}
+        {% set countUnjudged = 0 %}
+        {% set countDisabled = 0 %}
+        {% set countResubmission = 0 %}
+        {% set countOther = 0 %}
+        
+        {# Now keep track of the count for each status we encounter. #}
+        {% for song in relatedsongs %}
+        
+            {# The judge status is in the review content type, so get that first. #}
+            {% set relatedReviews = song.related() %}
+            {% set reviewsArr = [] %}
+            {% for related in relatedReviews %}
+                {% if related.contenttype.singular_name == "Review" %}
+                    {% set reviewsArr = reviewsArr|merge([related]) %}
+                {% endif %}
+            {% endfor %}
+        
+            {# Now that we have our review in a single-element array, get the judge review data. #}
+            {% for review in reviewsArr %}
+                {% if review.values.judgestatus == "Released" %}
+                    {% set countReleased = countReleased + 1 %}
+                {% elseif review.values.judgestatus == "Accepted" %}
+                    {% set countAccepted = countAccepted + 1 %}
+                {% elseif review.values.judgestatus == "Pending Fixes" %}
+                    {% set countPending = countPending + 1 %}
+                {% elseif review.values.judgestatus == "Conditional Queue" %}
+                    {% set countCQ = countCQ + 1 %}
+                {% elseif review.values.judgestatus == "Rejected" %}
+                    {% set countRejected = countRejected + 1 %}
+                {% elseif review.values.judgestatus == "Judged" %}
+                    {% set countJudged = countJudged + 1 %}
+                {% elseif review.values.judgestatus == "Unjudged" %}
+                    {% set countUnjudged = countUnjudged + 1 %}
+                {% elseif review.values.judgestatus == "Disabled" %}
+                    {% set countDisabled = countDisabled + 1 %}
+                {% elseif review.values.judgestatus == "Resubmission" %}
+                    {% set countResubmission = countResubmission + 1 %}
+                {% else %}
+                    {% set countOther = countOther + 1 %}
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+        
+        {# This is the panel for the total number of songs in the batch, as well as the breakdown of status. #}
+        <div class="panel panel-default">
+
+            <div class="panel-heading">
+                <i class="fa fa-bar-chart"></i> Song Status Stats
+            </div>
+
+            <div class="panel-body">
+                
+                {# This table displays number of songs in the batch and status. #}
+                <table class="table">
+
+                    <tbody>
+                        <tr>
+                            <td><b>Total Songs</b></td>
+                            <td>{{ relatedsongs|length }}</td>
+                        </tr>
+                        
+                        <tr>
+                            <td><b>Total Judged</b></td>
+                            <td>{{ (relatedsongs|length) - (countUnjudged + countOther) }}</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Released</td>
+                            <td>{{ countReleased }}</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Accepted</td>
+                            <td>{{ countAccepted }}</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Disabled</td>
+                            <td>{{ countDisabled }}</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Pending Fixes</td>
+                            <td>{{ countPending }}</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Conditional Queue</td>
+                            <td>{{ countCQ }}</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Resubmission Allowed</td>
+                            <td>{{ countResubmission }}</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Rejected</td>
+                            <td>{{ countRejected }}</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Judged</td>
+                            <td>{{ countJudged }}</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Unjudged/Other</td>
+                            <td>{{ countUnjudged + countOther }}</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+                
+            </div> <!-- End Panel Body -->
+
+        </div>
+        
+        {# Using the songs array, create a table for the song listing. #}
+        <div>
+            <div class="panel panel-default">
+                <div class="panel-heading"><i class="fa fa-list"></i> Song Listing</div>
+                <div class="panel-body">
+
+                    <table class="display" id="batchTable" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <td>Title</td>
+                                <td>Artist</td>
+                                <td>Stepper</td>
+                                <td>Status</td>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for song in relatedsongs %}
+                                {# The judge status is in the review content type, so get that first. #}
+                                {% set relatedReviews = song.related() %}
+                                {% set reviewsArr = [] %}
+                                {% for related in relatedReviews %}
+                                    {% if related.contenttype.singular_name == "Review" %}
+                                        {% set reviewsArr = reviewsArr|merge([related]) %}
+                                    {% endif %}
+                                {% endfor %}
+
+                                {# Now that we have our review in a single-element array, get the judge review data. #}
+                                {% for review in reviewsArr %}
+                                    <tr>
+                                        <td>
+                                            <a href="/song/{{ song.slug }}">{{ song.title }}</a>
+                                        </td>
+                                        <td>{{ song.artist }}</td>
+                                        <td>{{ song.stepartist }}</td>
+                                        <td>{{ review.values.judgestatus }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    {# Initialize the datatable. #}
+                    <script>
+                        $('#batchTable').DataTable( {
+                            "pagingType": "full_numbers"
+                        } );
+                    </script>
+                </div> <!-- End Panel Body -->
+            </div>
+        </div>
+        
+        {# Single Accordion div for stepper SAP and submission stats, put this at the end #}
+        <div id="accordionSingle" role="tablist" aria-multiselectable="true" class="panel-group">
+
+            {# Stepartist SAP Collection Accordion #}
+            <div class="panel panel-default">
+
+                {# Clickable Heading for expanding or collapsing. #}
+                <div role="tab" id="headingSteppers" class="panel-heading">
+                    <h4 class="panel-title">
+                        <a id="collapseSteppersAnchor" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSteppers" aria-expanded="true" aria-controls="collapseSteppers" style="width:100%;display:inline-block;" class=""><i class="fa fa-users"></i> Stepartist SAP Results</a>
+                    </h4>
+                </div>
+
+                {# The div with actual content inside the accordion. #}
+                <div id="collapseSteppers" role="tabpanel" aria-labelledby="headingSteppers" class="panel-collapse collapse" aria-expanded="true">
+                    <div class="panel-body">
+                        
+                        {% include '_stepperstats.twig' %}
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        {# End Single Accordion div #}
+
+    </div>
+
+<!-- End Main Content and Sidebar -->
+
+
+
+{% include '_footer.twig' %}

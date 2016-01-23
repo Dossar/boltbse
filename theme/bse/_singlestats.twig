@@ -1,0 +1,276 @@
+{% if sBeginnerRatings > 0 or sEasyRatings > 0 or sMediumRatings > 0 or sHardRatings > 0 or sChallengeRatings > 0 and packCounter is defined %}
+    <div>
+        <center>
+            <h2>
+                <i class="fa fa-arrow-left"></i>
+                <i class="fa fa-arrow-down"></i>
+                <i class="fa fa-arrow-up"></i>
+                <i class="fa fa-arrow-right"></i>
+            </h2>
+        </center>
+    </div>
+
+    {# Single Accordion div #}
+    <div id="accordionStatsSingle{{ packCounter }}" role="tablist" aria-multiselectable="true" class="panel-group">
+
+        {# Single-Beginner Accordion #}
+        {% if sBeginnerRatings > 0 %}
+            <div class="panel panel-default">
+
+                {# Clickable Heading for expanding or collapsing this score table. #}
+                <div role="tab" id="headingStatsSbeginner{{ packCounter }}" class="panel-heading">
+                    <h4 class="panel-title">
+                        <a id="collapseStatsSbeginnerAnchor{{ packCounter }}" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseStatsSbeginner{{ packCounter }}" aria-expanded="true" aria-controls="collapseStatsSbeginner{{ packCounter }}" style="width:100%;display:inline-block;" class=""><i class="fa fa-arrow-right icon-purple"></i> Single Beginner Stats</a>
+                    </h4>
+                </div>
+
+                {# The div with actual content inside the accordion. #}
+                <div id="collapseStatsSbeginner{{ packCounter }}" role="tabpanel" aria-labelledby="headingStatsSbeginner{{ packCounter }}" class="panel-collapse collapse" aria-expanded="true">
+                    <div class="panel-body">
+
+                        <center>
+                            <h4>Average Difficulty: {{ sBeginnerRatings / sBeginnerRatingArr|length }}</h4>
+                        </center>
+
+                        {# After the heading, create the table of scores. #}
+                        <table class="display" id="sStatsBeginnerTable{{ packCounter }}" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <td>Difficulty</td>
+                                    <td>Frequency</td>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for key,value in sBeginnerDiffs %}
+                                    <tr>
+                                        <td>{{ key }}</td>
+                                        <td>{{ value }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        {# Initialize the datatable. #}
+                        <script>
+                            $('#sStatsBeginnerTable{{ packCounter }}').DataTable( {
+                                "pagingType": "full_numbers"
+                            } );
+                        </script>
+
+                    </div>
+                </div>
+
+            </div>
+        {% endif %}
+
+        {# Single-Easy Accordion #}
+        {% if sEasyRatings > 0 %}
+            <div class="panel panel-default">
+
+                {# Clickable Heading for expanding or collapsing this score table. #}
+                <div role="tab" id="headingStatsSeasy{{ packCounter }}" class="panel-heading">
+                    <h4 class="panel-title">
+                        <a id="collapseStatsSeasyAnchor{{ packCounter }}" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseStatsSeasy{{ packCounter }}" aria-expanded="true" aria-controls="collapseStatsSeasy{{ packCounter }}" style="width:100%;display:inline-block;" class=""><i class="fa fa-arrow-right icon-green"></i> Single Easy Stats</a>
+                    </h4>
+                </div>
+
+                {# The div with actual content inside the accordion. #}
+                <div id="collapseStatsSeasy{{ packCounter }}" role="tabpanel" aria-labelledby="headingStatsSeasy{{ packCounter }}" class="panel-collapse collapse" aria-expanded="true">
+                    <div class="panel-body">
+
+                        <center>
+                            <h4>Average Difficulty: {{ sEasyRatings / sEasyRatingArr|length }}</h4>
+                        </center>
+
+                        {# After the heading, create the table of scores. #}
+                        <table class="display" id="sStatsEasyTable{{ packCounter }}" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <td>Difficulty</td>
+                                    <td>Frequency</td>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for key,value in sEasyDiffs %}
+                                    <tr>
+                                        <td>{{ key }}</td>
+                                        <td>{{ value }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        {# Initialize the datatable. #}
+                        <script>
+                            $('#sStatsEasyTable{{ packCounter }}').DataTable( {
+                                "pagingType": "full_numbers"
+                            } );
+                        </script>
+
+                    </div>
+                </div>
+
+            </div>
+        {% endif %}
+
+        {# Single-Medium Accordion #}
+        {% if sMediumRatings > 0 %}
+            <div class="panel panel-default">
+
+                {# Clickable Heading for expanding or collapsing this score table. #}
+                <div role="tab" id="headingStatsSmedium{{ packCounter }}" class="panel-heading">
+                    <h4 class="panel-title">
+                        <a id="collapseStatsSmediumAnchor{{ packCounter }}" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseStatsSmedium{{ packCounter }}" aria-expanded="true" aria-controls="collapseStatsSmedium{{ packCounter }}" style="width:100%;display:inline-block;" class=""><i class="fa fa-arrow-right icon-yellow"></i> Single Medium Stats</a>
+                    </h4>
+                </div>
+
+                {# The div with actual content inside the accordion. #}
+                <div id="collapseStatsSmedium{{ packCounter }}" role="tabpanel" aria-labelledby="headingStatsSmedium{{ packCounter }}" class="panel-collapse collapse" aria-expanded="true">
+                    <div class="panel-body">
+
+                        <center>
+                            <h4>Average Difficulty: {{ sMediumRatings / sMediumRatingArr|length }}</h4>
+                        </center>
+
+                        {# After the heading, create the table of scores. #}
+                        <table class="display" id="sStatsMediumTable{{ packCounter }}" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <td>Difficulty</td>
+                                    <td>Frequency</td>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for key,value in sMediumDiffs %}
+                                    <tr>
+                                        <td>{{ key }}</td>
+                                        <td>{{ value }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        {# Initialize the datatable. #}
+                        <script>
+                            $('#sStatsMediumTable{{ packCounter }}').DataTable( {
+                                "pagingType": "full_numbers"
+                            } );
+                        </script>
+
+                    </div>
+                </div>
+
+            </div>
+        {% endif %}
+
+        {# Single-Hard Accordion #}
+        {% if sHardRatings > 0 %}
+            <div class="panel panel-default">
+
+                {# Clickable Heading for expanding or collapsing this score table. #}
+                <div role="tab" id="headingStatsShard{{ packCounter }}" class="panel-heading">
+                    <h4 class="panel-title">
+                        <a id="collapseStatsShardAnchor{{ packCounter }}" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseStatsShard{{ packCounter }}" aria-expanded="true" aria-controls="collapseStatsShard{{ packCounter }}" style="width:100%;display:inline-block;" class=""><i class="fa fa-arrow-right icon-red"></i> Single Hard Stats</a>
+                    </h4>
+                </div>
+
+                {# The div with actual content inside the accordion. #}
+                <div id="collapseStatsShard{{ packCounter }}" role="tabpanel" aria-labelledby="headingStatsShard{{ packCounter }}" class="panel-collapse collapse" aria-expanded="true">
+                    <div class="panel-body">
+
+                        {# Heading that displays the difficulty average. #}
+                        <center>
+                            <h4>Average Difficulty: {{ sHardRatings / sHardRatingArr|length }}</h4>
+                        </center>
+
+                        {# After the heading, create the table of scores. #}
+                        <table class="display" id="sStatsHardTable{{ packCounter }}" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <td>Difficulty</td>
+                                    <td>Frequency</td>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for key,value in sHardDiffs %}
+                                    <tr>
+                                        <td>{{ key }}</td>
+                                        <td>{{ value }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        {# Initialize the datatable. #}
+                        <script>
+                            $('#sStatsHardTable{{ packCounter }}').DataTable( {
+                                "pagingType": "full_numbers"
+                            } );
+                        </script>
+
+                    </div>
+                </div>
+
+            </div>
+        {% endif %}
+
+        {# Single-Challenge Accordion #}
+        {% if sChallengeRatings > 0 %}
+            <div class="panel panel-default">
+
+                {# Clickable Heading for expanding or collapsing this score table. #}
+                <div role="tab" id="headingStatsSchallenge{{ packCounter }}" class="panel-heading">
+                    <h4 class="panel-title">
+                        <a id="collapseStatsSchallengeAnchor{{ packCounter }}" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseStatsSchallenge{{ packCounter }}" aria-expanded="true" aria-controls="collapseStatsSchallenge{{ packCounter }}" style="width:100%;display:inline-block;" class=""><i class="fa fa-arrow-right icon-blue"></i> Single Challenge Stats</a>
+                    </h4>
+                </div>
+
+                {# The div with actual content inside the accordion. #}
+                <div id="collapseStatsSchallenge{{ packCounter }}" role="tabpanel" aria-labelledby="headingStatsSchallenge{{ packCounter }}" class="panel-collapse collapse" aria-expanded="true">
+                    <div class="panel-body">
+
+                        {# Heading that displays the difficulty average. #}
+                        <center>
+                            <h4>Average Difficulty: {{ sChallengeRatings / sChallengeRatingArr|length }}</h4>
+                        </center>
+
+                        {# After the heading, create the table of scores. #}
+                        <table class="display" id="sStatsChallengeTable{{ packCounter }}" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <td>Difficulty</td>
+                                    <td>Frequency</td>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for key,value in sChallengeDiffs %}
+                                    <tr>
+                                        <td>{{ key }}</td>
+                                        <td>{{ value }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        {# Initialize the datatable. #}
+                        <script>
+                            $('#sStatsChallengeTable{{ packCounter }}').DataTable( {
+                                "pagingType": "full_numbers"
+                            } );
+                        </script>
+
+                    </div>
+                </div>
+
+            </div>
+        {% endif %}
+
+    </div>
+    {# End Single Accordion div #}
+
+{% endif %}

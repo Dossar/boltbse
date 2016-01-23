@@ -1,0 +1,277 @@
+{% include '_header.twig' %}
+
+<!-- Main Page Content and Sidebar -->
+
+    <!-- Main Blog Content -->
+    <div class="large-12 columns">
+        
+        {# Get all songs first. #}
+        {% setcontent allSongs = 'songs' %}
+        {% set releasedSongs = [] %}
+        {% set acceptedSongs = [] %}
+        {% set conditionalSongs = [] %}
+        {% set numPending = 0 %}
+        {% set numConditional = 0 %}
+        {% for song in allSongs %}
+        
+            {# The judge status is in the review content type, so get that first. #}
+            {% set relatedReviews = song.related() %}
+            {% set reviewsArr = [] %}
+            {% for related in relatedReviews %}
+                {% if related.contenttype.singular_name == "Review" %}
+                    {% set reviewsArr = reviewsArr|merge([related]) %}
+                {% endif %}
+            {% endfor %}
+        
+            {# Now that we have our review in a single-element array, get the judge review data. #}
+            {% for review in reviewsArr %}
+                {% if review.values.judgestatus == "Released" or
+                      review.values.judgestatus == "Disabled" %}
+                    {% set releasedSongs = releasedSongs|merge([song]) %}
+                {% elseif review.values.judgestatus == "Accepted" %}
+                    {% set acceptedSongs = acceptedSongs|merge([song]) %}
+                {% elseif review.values.judgestatus == "Pending Fixes" %}
+                    {% set conditionalSongs = conditionalSongs|merge([song]) %}
+                    {% set numPending = numPending + 1 %}
+                {% elseif review.values.judgestatus == "Conditional Queue" %}
+                    {% set conditionalSongs = conditionalSongs|merge([song]) %}
+                    {% set numConditional = numConditional + 1 %}
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+        
+        {# Create a table of all currently accepted files. #}
+        <div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong class="icon-green"><i class="fa fa-arrow-right"></i> Accepted Songs</strong>
+                </div>
+                <div class="panel-body">
+
+                    <table class="display" id="acceptedSongsTable" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <td>Title</td>
+                                <td>Artist</td>
+                                <td>Stepper</td>
+                                <td>Status</td>
+                                <td>Batch</td>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for song in acceptedSongs %}
+                                {# Before making the row, get the batch name first from the song's relation. #}
+                                {% set relatedsongcontent = song.related() %}
+                                {% set batchtitle = "" %}
+                                {% set batchslug = "" %}
+                                {% set reviewsArr = [] %}
+                                {% for relatedcontent in relatedsongcontent %}
+                                    {# Check that this is a batch type. If it is, get the batch name. #}
+                                    {% if relatedcontent.contenttype.singular_name == "Batch" %}
+                                        {% set batchtitle = relatedcontent.values.title %}
+                                        {% set batchslug = relatedcontent.values.slug %}
+                                    {% endif %}
+                            
+                                    {# Check if we have a Review. We'll need it for the judge status. #}
+                                    {% if relatedcontent.contenttype.singular_name == "Review" %}
+                                        {% set reviewsArr = reviewsArr|merge([relatedcontent]) %}
+                                    {% endif %}
+                                {% endfor %}
+
+                                {# Now that we have our review in a single-element array, get the judge review data. #}
+                                {% for review in reviewsArr %}
+                                    <tr>
+                                        <td>
+                                            <a href="/song/{{ song.slug }}">{{ song.title }}</a>
+                                        </td>
+                                        <td>{{ song.artist }}</td>
+                                        <td>{{ song.stepartist }}</td>
+                                        <td>{{ review.values.judgestatus }}</td>
+                                        <td>
+                                            <a href="/batch/{{ batchslug }}">{{ batchtitle }}</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    {# Initialize the datatable. #}
+                    <script>
+                        $('#acceptedSongsTable').DataTable( {
+                            "pagingType": "full_numbers"
+                        } );
+                    </script>
+                </div> <!-- End Panel Body -->
+            </div>
+        </div>
+        
+        {# Create a table of all currently conditionally queue'd files. #}
+        <div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong class="icon-yellow"><i class="fa fa-arrow-right"></i> Conditional Queue Songs</strong>
+                </div>
+                <div class="panel-body">
+
+                    <table class="display" id="conditionalSongsTable" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <td>Title</td>
+                                <td>Artist</td>
+                                <td>Stepper</td>
+                                <td>Status</td>
+                                <td>Batch</td>
+                            </tr>
+                        </thead>
+                        
+                        <center>
+                            <h4>Pending Fixes: {{ numPending }}</h4>
+                            <h4>No Fixes or Appeal: {{ numConditional }}</h4>
+                        </center>
+
+                        <tbody>
+                            {% for song in conditionalSongs %}
+                                {# Before making the row, get the batch name first from the song's relation. #}
+                                {% set relatedsongcontent = song.related() %}
+                                {% set batchtitle = "" %}
+                                {% set batchslug = "" %}
+                                {% set reviewsArr = [] %}
+                                {% for relatedcontent in relatedsongcontent %}
+                                    {# Check that this is a batch type. If it is, get the batch name. #}
+                                    {% if relatedcontent.contenttype.singular_name == "Batch" %}
+                                        {% set batchtitle = relatedcontent.values.title %}
+                                        {% set batchslug = relatedcontent.values.slug %}
+                                    {% endif %}
+                            
+                                    {# Check if we have a Review. We'll need it for the judge status. #}
+                                    {% if relatedcontent.contenttype.singular_name == "Review" %}
+                                        {% set reviewsArr = reviewsArr|merge([relatedcontent]) %}
+                                    {% endif %}
+                                {% endfor %}
+                            
+                                {# The judge status is in the review content type, so get that first. #}
+                                {% set relatedReviews = song.related() %}
+                                {% set reviewsArr = [] %}
+                                {% for related in relatedReviews %}
+                                    {% if related.contenttype.singular_name == "Review" %}
+                                        {% set reviewsArr = reviewsArr|merge([related]) %}
+                                    {% endif %}
+                                {% endfor %}
+
+                                {# Now that we have our review in a single-element array, get the judge review data. #}
+                                {% for review in reviewsArr %}
+                                    <tr>
+                                        <td>
+                                            <a href="/song/{{ song.slug }}">{{ song.title }}</a>
+                                        </td>
+                                        <td>{{ song.artist }}</td>
+                                        <td>{{ song.stepartist }}</td>
+                                        <td>{{ review.values.judgestatus }}</td>
+                                        <td>
+                                            <a href="/batch/{{ batchslug }}">{{ batchtitle }}</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    {# Initialize the datatable. #}
+                    <script>
+                        $('#conditionalSongsTable').DataTable( {
+                            "pagingType": "full_numbers"
+                        } );
+                    </script>
+                </div> <!-- End Panel Body -->
+            </div>
+        </div>
+        
+        {# Create a table of all released and disabled songs. #}
+        <div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong class="icon-lightblue"><i class="fa fa-arrow-right"></i> Released Songs</strong>
+                </div>
+                <div class="panel-body">
+                    
+                    <center>
+                        <p>Note this section also includes Disabled files.</p>
+                    </center>
+
+                    <table class="display" id="releasedSongsTable" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <td>Title</td>
+                                <td>Artist</td>
+                                <td>Stepper</td>
+                                <td>Status</td>
+                                <td>Batch</td>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for song in releasedSongs %}
+                                {# Before making the row, get the batch name first from the song's relation. #}
+                                {% set relatedsongcontent = song.related() %}
+                                {% set batchtitle = "" %}
+                                {% set batchslug = "" %}
+                                {% set reviewsArr = [] %}
+                                {% for relatedcontent in relatedsongcontent %}
+                                    {# Check that this is a batch type. If it is, get the batch name. #}
+                                    {% if relatedcontent.contenttype.singular_name == "Batch" %}
+                                        {% set batchtitle = relatedcontent.values.title %}
+                                        {% set batchslug = relatedcontent.values.slug %}
+                                    {% endif %}
+                            
+                                    {# Check if we have a Review. We'll need it for the judge status. #}
+                                    {% if relatedcontent.contenttype.singular_name == "Review" %}
+                                        {% set reviewsArr = reviewsArr|merge([relatedcontent]) %}
+                                    {% endif %}
+                                {% endfor %}
+                            
+                                {# The judge status is in the review content type, so get that first. #}
+                                {% set relatedReviews = song.related() %}
+                                {% set reviewsArr = [] %}
+                                {% for related in relatedReviews %}
+                                    {% if related.contenttype.singular_name == "Review" %}
+                                        {% set reviewsArr = reviewsArr|merge([related]) %}
+                                    {% endif %}
+                                {% endfor %}
+
+                                {# Now that we have our review in a single-element array, get the judge review data. #}
+                                {% for review in reviewsArr %}
+                                    <tr>
+                                        <td>
+                                            <a href="/song/{{ song.slug }}">{{ song.title }}</a>
+                                        </td>
+                                        <td>{{ song.artist }}</td>
+                                        <td>{{ song.stepartist }}</td>
+                                        <td>{{ review.values.judgestatus }}</td>
+                                        <td>
+                                            <a href="/batch/{{ batchslug }}">{{ batchtitle }}</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    {# Initialize the datatable. #}
+                    <script>
+                        $('#releasedSongsTable').DataTable( {
+                            "pagingType": "full_numbers"
+                        } );
+                    </script>
+                </div> <!-- End Panel Body -->
+            </div>
+        </div>
+        
+    </div>
+
+<!-- End Main Content and Sidebar -->
+
+
+
+{% include '_footer.twig' %}

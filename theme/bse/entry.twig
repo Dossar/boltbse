@@ -1,0 +1,18 @@
+{% include '_header.twig' %}
+
+<!-- Main Page Content and Sidebar -->
+
+    <!-- Main Blog Content -->
+    <div class="large-12 columns">
+        <article>
+
+            <h4><a href="/entry/{{ record.slug }}">{{ record.title }}</a></h4>
+
+            <div>{{ record.body }}</div>
+
+        </article>
+    </div>
+
+<!-- End Main Content and Sidebar -->
+
+{% include '_footer.twig' %}

@@ -1,0 +1,52 @@
+{% if song is defined %}
+
+    {# Before making the song information table, get the pack name first from the song's relation. #}
+    {% set relatedsongcontent = song.related() %}
+    {% for relatedcontent in relatedsongcontent %}
+        {# Check that this is a songpack type. If it is, get the pack name. #}
+        {% if relatedcontent.contenttype.singular_name == "Songpack" %}
+            {% set packtitle = relatedcontent.values.title %}
+            {% set packslug = relatedcontent.values.slug %}
+        {% endif %}
+    {% endfor %}
+
+    {# Now we can make the song information table. #}
+    <div>
+        <center>
+            <img src="/files/{{ song.banner }}" style="padding-bottom: 20px;">
+        </center>
+        
+        <div class="panel panel-default">
+
+            <div class="panel-heading">
+                <i class="fa fa-arrow-up fa-spin"></i> Song Information
+            </div>
+
+            <div class="panel-body">
+                
+                <center>
+                    <h4>{{ song.title }}</h4>
+                    <h4>Made by {{ song.artist }}</h4>
+                    <h4>Stepped by {{ song.stepartist }}</h4>
+                    <h4>{{ song.bpm }} BPM</h4>
+                    <h4>{{ song.length }} Length</h4>
+                    <h4>From <a href="/songpack/{{ packslug }}">{{ packtitle }}</a></h4>
+                    
+                    {# Audio Controls. The audioPlayer() function initializes the audio player. #}
+                    <div id="wrapper">
+                        <audio preload="auto" controls>
+                            <source src="/files/{{ song.audiofile }}" type="audio/mpeg" />
+                        </audio>
+                        <script>$( 'audio' ).audioPlayer();</script>
+                    </div>
+                    
+                </center>
+
+            </div> <!-- End Panel Body -->
+
+        </div>
+
+        
+    </div>
+
+{% endif %}

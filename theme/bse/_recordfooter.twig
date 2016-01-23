@@ -1,0 +1,5 @@
+{# This file is inserted as the 'footer' of each listed record. #}
+<h6>
+    {% set recdate = record.datepublish|localdate("%A %B %e, %Y") %}
+    {{ __('Written by <em>%name%</em> on %date%',{ '%name%': record.user.displayname, '%date%': recdate }) }} <br>
+</h6>

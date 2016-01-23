@@ -1,0 +1,119 @@
+{# Get all the stepartists for the batch by looping through our songs and adding to the array if
+   the stepartist isn't already in it. #}
+{% set stepartists = [] %}
+{% for song in relatedsongs %}
+    {% if song.values.stepartist not in stepartists %}
+        {% set stepartists = stepartists|merge([song.values.stepartist]) %}
+    {% endif %}
+{% endfor %}
+
+{# Now that we have all our individual stepartists, get all songs in this batch from that stepartist. #}
+{% for stepper in stepartists %}
+
+    {# Make an array that will house the stepartist's songs. #}
+    {% set stepperSongs = [] %}
+    {% set sapTotal = 0 %}
+    {% set sapPotential = 0 %}
+    {% set transfers = 0 %}
+    {% set normalSubs = 0 %}
+    {% for song in relatedsongs %}
+
+        {# First check of the stepartist field matches what stepartist we're getting stats for. #}
+        {% if song.values.stepartist == stepper %}
+            {% set stepperSongs = stepperSongs|merge([song]) %}
+
+            {# The judge status is in the review content type, so get that first. #}
+            {% set relatedReviews = song.related() %}
+            {% set reviewsArr = [] %}
+            {% for related in relatedReviews %}
+                {% if related.contenttype.singular_name == "Review" %}
+                    {% set reviewsArr = reviewsArr|merge([related]) %}
+                {% endif %}
+            {% endfor %}
+
+            {# Now that we have our review in a single-element array, get the judge review data. #}
+            {% for review in reviewsArr %}
+                {# Check how much SAP the judge would gain from this batch. #}
+                {% if review.values.judgestatus == "Released" or
+                   review.values.judgestatus == "Accepted" or
+                   review.values.judgestatus == "Disabled" %}
+                    {% set sapTotal = sapTotal + review.values.sap %}
+                {% endif %}
+                {% set sapPotential = sapPotential + review.values.sap %}
+
+                {# Check if this file is a transfer or not. If not a transfer, it's a normal submission. #}
+                {% if song.values.transfer != "" %}
+                    {% set transfers = transfers + 1 %}
+                {% else %}
+                    {% set normalSubs = normalSubs + 1 %}
+                {% endif %}
+            {% endfor %}
+
+        {% endif %}
+    {% endfor %}
+
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+            <i class="fa fa-user"></i> {{ stepper }}
+        </div>
+
+        <center>
+            <h4>Normal Submissions: {{ normalSubs }}</h4>
+            <h4>Transfers: {{ transfers }}</h4>
+            <h4>Current SAP Gained: {{ sapTotal }}</h4>
+            <h4>Potential SAP to Gain: {{ sapPotential }}</h4>
+        </center>
+
+        <div class="panel-body">
+
+            {# This table displays number of songs in the batch and status. #}
+            <table class="table">
+
+                <thead>
+                    <tr>
+                        <td>Title</td>
+                        <td>Artist</td>
+                        <td>Rating</td>
+                        <td>Status</td>
+                        <td>Transfer</td>
+                        <td>SAP</td>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for song in stepperSongs %}
+                    
+                        {# The judge status is in the review content type, so get that first. #}
+                        {% set relatedReviews = song.related() %}
+                        {% set reviewsArr = [] %}
+                        {% for related in relatedReviews %}
+                            {% if related.contenttype.singular_name == "Review" %}
+                                {% set reviewsArr = reviewsArr|merge([related]) %}
+                            {% endif %}
+                        {% endfor %}
+                    
+                        {# Now that we have our review in a single-element array, get the judge review data. #}
+                        {% for review in reviewsArr %}
+                            <tr>
+                                <td>{{ song.values.title }}</td>
+                                <td>{{ song.values.artist }}</td>
+                                <td>{{ review.values.judgerating }}</td>
+                                <td>{{ review.values.judgestatus }}</td>
+                                {% if song.values.transfer != "" %}
+                                    <td>{{ song.transfer }}</td>
+                                {% else %}
+                                    <td>No</td>
+                                {% endif %}
+                                <td>{{ review.values.sap }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div> <!-- End Panel Body -->
+
+    </div>
+
+{% endfor %}

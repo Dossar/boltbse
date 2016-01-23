@@ -1,0 +1,307 @@
+{% if dBeginnerRating > 0 or dEasyRating > 0 or dMediumRating > 0 or dHardRating > 0 or dChallengeRating > 0 %}
+    <div>
+        <center>
+            <h2>
+                <i class="fa fa-arrow-left"></i>
+                <i class="fa fa-arrow-down"></i>
+                <i class="fa fa-arrow-up"></i>
+                <i class="fa fa-arrow-right"></i>
+                <i class="fa fa-arrow-left"></i>
+                <i class="fa fa-arrow-down"></i>
+                <i class="fa fa-arrow-up"></i>
+                <i class="fa fa-arrow-right"></i>
+            </h2>
+        </center>
+    </div>
+
+    {# Double Accordion div #}
+    <div id="accordionDouble" role="tablist" aria-multiselectable="true" class="panel-group">
+
+        {# Double-Beginner Accordion #}
+        {% if dBeginnerRating > 0 %}
+            <div class="panel panel-default">
+
+                {# Clickable Heading for expanding or collapsing this score table. #}
+                <div role="tab" id="headingDbeginner" class="panel-heading">
+                    <h4 class="panel-title">
+                        <a id="collapseDbeginnerAnchor" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseDbeginner" aria-expanded="true" aria-controls="collapseDbeginner" style="width:100%;display:inline-block;" class=""><i class="fa fa-arrow-right icon-purple"></i> Double Beginner Scores</a>
+                    </h4>
+                </div>
+
+                {# The div with actual content inside the accordion. #}
+                <div id="collapseDbeginner" role="tabpanel" aria-labelledby="headingDbeginner" class="panel-collapse collapse" aria-expanded="true">
+                    <div class="panel-body">
+
+                        {# Heading that displays the difficulty. #}
+                        <center>
+                            <h4>Difficulty: {{ dBeginnerRating }}</h4>
+                            <h4>Notecount: {{ dBeginnerNotes }}</h4>
+                        </center>
+
+                        {# After the heading, create the table of scores. #}
+                        <table class="display" id="dBeginnerTable" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <td>Player</td>
+                                    <td>Score</td>
+                                    <td>Status</td>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for score in dBeginnerScores %}
+                                    <tr>
+                                        <td>{{ score.player }}</td>
+                                        <td>
+                                            <a href="/score/{{ score.slug }}">{{ score.scoredetails }}</a>
+                                        </td>
+                                        <td>{{ score.cleared }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        {# Initialize the datatable. #}
+                        <script>
+                            $('#dBeginnerTable').DataTable( {
+                                "pagingType": "full_numbers"
+                            } );
+                        </script>
+
+                    </div>
+                </div>
+
+            </div>
+        {% endif %}
+
+        {# Double-Easy Accordion #}
+        {% if dEasyRating > 0 %}
+            <div class="panel panel-default">
+
+                {# Clickable Heading for expanding or collapsing this score table. #}
+                <div role="tab" id="headingDeasy" class="panel-heading">
+                    <h4 class="panel-title">
+                        <a id="collapseDeasyAnchor" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseDeasy" aria-expanded="true" aria-controls="collapseDeasy" style="width:100%;display:inline-block;" class=""><i class="fa fa-arrow-right icon-green"></i> Double Easy Scores</a>
+                    </h4>
+                </div>
+
+                {# The div with actual content inside the accordion. #}
+                <div id="collapseDeasy" role="tabpanel" aria-labelledby="headingDeasy" class="panel-collapse collapse" aria-expanded="true">
+                    <div class="panel-body">
+
+                        {# Heading that displays the difficulty. #}
+                        <center>
+                            <h4>Difficulty: 10</h4>
+                        </center>
+
+                        {# After the heading, create the table of scores. #}
+                        <table class="display" id="dEasyTable" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <td>Player</td>
+                                    <td>Score</td>
+                                    <td>Status</td>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for score in dEasyScores %}
+                                    <tr>
+                                        <td>{{ score.player }}</td>
+                                        <td>
+                                            <a href="/score/{{ score.slug }}">{{ score.scoredetails }}</a>
+                                        </td>
+                                        <td>{{ score.cleared }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        {# Initialize the datatable. #}
+                        <script>
+                            $('#dEasyTable').DataTable( {
+                                "pagingType": "full_numbers"
+                            } );
+                        </script>
+
+                    </div>
+                </div>
+
+            </div>
+        {% endif %}
+
+        {# Double-Medium Accordion #}
+        {% if dMediumRating > 0 %}
+            <div class="panel panel-default">
+
+                {# Clickable Heading for expanding or collapsing this score table. #}
+                <div role="tab" id="headingDmedium" class="panel-heading">
+                    <h4 class="panel-title">
+                        <a id="collapseDmediumAnchor" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseDmedium" aria-expanded="true" aria-controls="collapseDmedium" style="width:100%;display:inline-block;" class=""><i class="fa fa-arrow-right icon-yellow"></i> Double Medium Scores</a>
+                    </h4>
+                </div>
+
+                {# The div with actual content inside the accordion. #}
+                <div id="collapseDmedium" role="tabpanel" aria-labelledby="headingDmedium" class="panel-collapse collapse" aria-expanded="true">
+                    <div class="panel-body">
+
+                        {# Heading that displays the difficulty. #}
+                        <center>
+                            <h4>Difficulty: {{ dMediumRating }}</h4>
+                            <h4>Notecount: {{ dMediumNotes }}</h4>
+                        </center>
+
+                        {# After the heading, create the table of scores. #}
+                        <table class="display" id="dMediumTable" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <td>Player</td>
+                                    <td>Score</td>
+                                    <td>Status</td>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for score in dMediumScores %}
+                                    <tr>
+                                        <td>{{ score.player }}</td>
+                                        <td>
+                                            <a href="/score/{{ score.slug }}">{{ score.scoredetails }}</a>
+                                        </td>
+                                        <td>{{ score.cleared }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        {# Initialize the datatable. #}
+                        <script>
+                            $('#dMediumTable').DataTable( {
+                                "pagingType": "full_numbers"
+                            } );
+                        </script>
+
+                    </div>
+                </div>
+
+            </div>
+        {% endif %}
+
+        {# Double-Hard Accordion #}
+        {% if dHardRating > 0 %}
+            <div class="panel panel-default">
+
+                {# Clickable Heading for expanding or collapsing this score table. #}
+                <div role="tab" id="headingDhard" class="panel-heading">
+                    <h4 class="panel-title">
+                        <a id="collapseDhardAnchor" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseDhard" aria-expanded="true" aria-controls="collapseDhard" style="width:100%;display:inline-block;" class=""><i class="fa fa-arrow-right icon-red"></i> Double Hard Scores</a>
+                    </h4>
+                </div>
+
+                {# The div with actual content inside the accordion. #}
+                <div id="collapseDhard" role="tabpanel" aria-labelledby="headingDhard" class="panel-collapse collapse" aria-expanded="true">
+                    <div class="panel-body">
+
+                        {# Heading that displays the difficulty. #}
+                        <center>
+                            <h4>Difficulty: {{ dHardRating }}</h4>
+                            <h4>Notecount: {{ dHardNotes }}</h4>
+                        </center>
+
+                        {# After the heading, create the table of scores. #}
+                        <table class="display" id="dHardTable" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <td>Player</td>
+                                    <td>Score</td>
+                                    <td>Status</td>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for score in dHardScores %}
+                                    <tr>
+                                        <td>{{ score.player }}</td>
+                                        <td>
+                                            <a href="/score/{{ score.slug }}">{{ score.scoredetails }}</a>
+                                        </td>
+                                        <td>{{ score.cleared }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        {# Initialize the datatable. #}
+                        <script>
+                            $('#dHardTable').DataTable( {
+                                "pagingType": "full_numbers"
+                            } );
+                        </script>
+
+                    </div>
+                </div>
+
+            </div>
+        {% endif %}
+
+        {# Double-Challenge Accordion #}
+        {% if dChallengeRating > 0 %}
+            <div class="panel panel-default">
+
+                {# Clickable Heading for expanding or collapsing this score table. #}
+                <div role="tab" id="headingDchallenge" class="panel-heading">
+                    <h4 class="panel-title">
+                        <a id="collapseDchallengeAnchor" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseDchallenge" aria-expanded="true" aria-controls="collapseDchallenge" style="width:100%;display:inline-block;" class=""><i class="fa fa-arrow-right icon-blue"></i> Double Challenge Scores</a>
+                    </h4>
+                </div>
+
+                {# The div with actual content inside the accordion. #}
+                <div id="collapseDchallenge" role="tabpanel" aria-labelledby="headingDchallenge" class="panel-collapse collapse" aria-expanded="true">
+                    <div class="panel-body">
+
+                        {# Heading that displays the difficulty. #}
+                        <center>
+                            <h4>Difficulty: {{ dChallengeRating }}</h4>
+                            <h4>Notecount: {{ dChallengeNotes }}</h4>
+                        </center>
+
+                        {# After the heading, create the table of scores. #}
+                        <table class="display" id="dChallengeTable" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <td>Player</td>
+                                    <td>Score</td>
+                                    <td>Status</td>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for score in dChallengeScores %}
+                                    <tr>
+                                        <td>{{ score.player }}</td>
+                                        <td>
+                                            <a href="/score/{{ score.slug }}">{{ score.scoredetails }}</a>
+                                        </td>
+                                        <td>{{ score.cleared }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        {# Initialize the datatable. #}
+                        <script>
+                            $('#dChallengeTable').DataTable( {
+                                "pagingType": "full_numbers"
+                            } );
+                        </script>
+
+                    </div>
+                </div>
+
+            </div>
+        {% endif %}
+
+    </div>
+    {# End Double Accordion div #}
+
+{% endif %}

@@ -53,7 +53,31 @@ contentlisting:
 # ------------------------------------------------------------------------------
 # Place your own routes here, that have a LOWER priority than the default routes.
 
+aboutbinding:
+    path: '/about/'
+    defaults:
+        _controller: 'Bolt\Controllers\Frontend::template'
+        template: 'about'
+        
+articlesbinding:
+    path: '/articles/'
+    defaults:
+        _controller: 'Bolt\Controllers\Frontend::template'
+        template: 'articles'
+        
+contactbinding:
+    path: '/contact/'
+    defaults:
+        _controller: 'Bolt\Controllers\Frontend::template'
+        template: 'contact'
+        
+# Batch related pages
 
+queuebinding:
+    path: '/queue/'
+    defaults:
+        _controller: 'Bolt\Controllers\Frontend::template'
+        template: 'queue'
 
 # ------------------------------------------------------------------------------
 # Routes examples:

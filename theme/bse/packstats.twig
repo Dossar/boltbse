@@ -1,0 +1,167 @@
+{% include '_header.twig' %}
+
+<!-- Main Page Content and Sidebar -->
+
+    <!-- Main Blog Content -->
+    <div class="large-12 columns">
+
+        <div class="panel panel-default">
+
+            <div class="panel-heading"><i class="fa fa-bar-chart"></i> Pack Difficulty Stats</div>
+
+            <div class="panel-body">
+
+                <table class="display" id="packTable" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <td>Pack</td>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {# Only get Crossover Spectrum Part I B for now. Be able to get the songs and look at the challenge single difficulty.
+                           Add the Challenge Single Rating to the challengeTotalRatings until we've done all 20 songs. #}
+                        {% setcontent songpacksToUse = 'songpacks' %}
+                        {% set packCounter = 1 %}
+                        
+                        {# We have an array of song packs, so we'll need to do this for every song pack. #}
+                        {% for songpack in songpacksToUse %}
+                            <tr>
+                                <td>
+                                    {# First, display the pack name with the slug in the link. #}
+                                    <center>
+                                        <h4>
+                                            <a href="/songpack/{{ songpack.slug }}">{{ songpack.title }}</a>
+                                        </h4>
+                                    </center>
+                                    
+                                    {# Single Total Rating Counters. Reset these at the start of every pack. #}
+                                    {% set sBeginnerRatings = 0 %}
+                                    {% set sEasyRatings = 0 %}
+                                    {% set sMediumRatings = 0 %}
+                                    {% set sHardRatings = 0 %}
+                                    {% set sChallengeRatings = 0 %}
+
+                                    {# Double Total Rating Counters. Reset these at the start of every pack. #}
+                                    {% set dBeginnerRatings = 0 %}
+                                    {% set dEasyRatings = 0 %}
+                                    {% set dMediumRatings = 0 %}
+                                    {% set dHardRatings = 0 %}
+                                    {% set dChallengeRatings = 0 %}
+
+                                    {# Create array for each single difficulty. #}
+                                    {% set sBeginnerRatingArr = [] %}
+                                    {% set sEasyRatingArr = [] %}
+                                    {% set sMediumRatingArr = [] %}
+                                    {% set sHardRatingArr = [] %}
+                                    {% set sChallengeRatingArr = [] %}
+
+                                    {# Create array for each double difficulty. #}
+                                    {% set dBeginnerRatingArr = [] %}
+                                    {% set dEasyRatingArr = [] %}
+                                    {% set dMediumRatingArr = [] %}
+                                    {% set dHardRatingArr = [] %}
+                                    {% set dChallengeRatingArr = [] %}
+
+                                    {# The number of songs in the pack will be used to divide for the average. #}
+                                    {% set songsInPack = songpack.related() %}
+                                    {% set numOfSongsInPack = songpack.totalsongs %}
+
+                                    {# Iterate over every song. Get its values key so we can start referencing the data. #}
+                                    {% for songContent in songsInPack %}
+                                        {% set song = songContent.values %}
+
+                                        {# Add up the single difficulty ratings to the total. #}
+                                        {% set sBeginnerRatings = sBeginnerRatings + song.sbeginnerrating %}
+                                        {% set sEasyRatings = sEasyRatings + song.seasyrating %}
+                                        {% set sMediumRatings = sMediumRatings + song.smediumrating %}
+                                        {% set sHardRatings = sHardRatings + song.shardrating %}
+                                        {% set sChallengeRatings = sChallengeRatings + song.schallengerating %}
+
+                                        {# Add up the double difficulty ratings to the total. #}
+                                        {% set dBeginnerRatings = dBeginnerRatings + song.dbeginnerrating %}
+                                        {% set dEasyRatings = dEasyRatings + song.deasyrating %}
+                                        {% set dMediumRatings = dMediumRatings + song.dmediumrating %}
+                                        {% set dHardRatings = dHardRatings + song.dhardrating %}
+                                        {% set dChallengeRatings = dChallengeRatings + song.dchallengerating %}
+
+                                        {# Add all the single ratings found to their respective arrays. #}
+                                        {% if song.sbeginnerrating > 0 %}
+                                            {% set sBeginnerRatingArr = sBeginnerRatingArr|merge([song.sbeginnerrating]) %}
+                                        {% endif %}
+                                        {% if song.seasyrating > 0 %}
+                                            {% set sEasyRatingArr = sEasyRatingArr|merge([song.seasyrating]) %}
+                                        {% endif %}
+                                        {% if song.smediumrating > 0 %}
+                                            {% set sMediumRatingArr = sMediumRatingArr|merge([song.smediumrating]) %}
+                                        {% endif %}
+                                        {% if song.shardrating > 0 %}
+                                            {% set sHardRatingArr = sHardRatingArr|merge([song.shardrating]) %}
+                                        {% endif %}
+                                        {% if song.schallengerating > 0 %}
+                                            {% set sChallengeRatingArr = sChallengeRatingArr|merge([song.schallengerating]) %}
+                                        {% endif %}
+
+                                        {# Add all the double ratings found to their respective arrays. #}
+                                        {% if song.dbeginnerrating > 0 %}
+                                            {% set dBeginnerRatingArr = dBeginnerRatingArr|merge([song.dbeginnerrating]) %}
+                                        {% endif %}
+                                        {% if song.deasyrating > 0 %}
+                                            {% set dEasyRatingArr = dEasyRatingArr|merge([song.deasyrating]) %}
+                                        {% endif %}
+                                        {% if song.dmediumrating > 0 %}
+                                            {% set dMediumRatingArr = dMediumRatingArr|merge([song.dmediumrating]) %}
+                                        {% endif %}
+                                        {% if song.dhardrating > 0 %}
+                                            {% set dHardRatingArr = dHardRatingArr|merge([song.dhardrating]) %}
+                                        {% endif %}
+                                        {% if song.dchallengerating > 0 %}
+                                            {% set dChallengeRatingArr = dChallengeRatingArr|merge([song.dchallengerating]) %}
+                                        {% endif %}
+
+                                    {% endfor %}
+
+                                    {# Find occurrences of each single difficulty. #}
+                                    {% set sBeginnerDiffs = key_sort(occurrences(sBeginnerRatingArr)) %}
+                                    {% set sEasyDiffs = key_sort(occurrences(sEasyRatingArr)) %}
+                                    {% set sMediumDiffs = key_sort(occurrences(sMediumRatingArr)) %}
+                                    {% set sHardDiffs = key_sort(occurrences(sHardRatingArr)) %}
+                                    {% set sChallengeDiffs = key_sort(occurrences(sChallengeRatingArr)) %}
+
+                                    {# Find occurrences of each double difficulty. #}
+                                    {% set dBeginnerDiffs = key_sort(occurrences(dBeginnerRatingArr)) %}
+                                    {% set dEasyDiffs = key_sort(occurrences(dEasyRatingArr)) %}
+                                    {% set dMediumDiffs = key_sort(occurrences(dMediumRatingArr)) %}
+                                    {% set dHardDiffs = key_sort(occurrences(dHardRatingArr)) %}
+                                    {% set dChallengeDiffs = key_sort(occurrences(dChallengeRatingArr)) %}
+
+                                    {# For each game mode/difficulty bracket, print out the individual ratings collected as well as
+                                       the overall average difficulty. #}
+
+                                    {% include '_singlestats.twig' %}
+                                    {% include '_doublestats.twig' %}
+                                    {% set packCounter = packCounter + 1 %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                {# Initialize the datatable. #}
+                <script>
+                    $('#packTable').DataTable( {
+                        "pagingType": "full_numbers"
+                    } );
+                </script>
+
+            </div> <!-- End Panel Body -->
+
+        </div>
+
+    </div>
+
+    
+
+<!-- End Main Content and Sidebar -->
+
+{% include '_footer.twig' %}

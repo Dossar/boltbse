@@ -1,0 +1,280 @@
+{% if dBeginnerRatings > 0 or dEasyRatings > 0 or dMediumRatings > 0 or dHardRatings > 0 or dChallengeRatings > 0 and packCounter is defined %}
+    <div>
+        <center>
+            <h2>
+                <i class="fa fa-arrow-left"></i>
+                <i class="fa fa-arrow-down"></i>
+                <i class="fa fa-arrow-up"></i>
+                <i class="fa fa-arrow-right"></i>
+                <i class="fa fa-arrow-left"></i>
+                <i class="fa fa-arrow-down"></i>
+                <i class="fa fa-arrow-up"></i>
+                <i class="fa fa-arrow-right"></i>
+            </h2>
+        </center>
+    </div>
+
+    {# Double Accordion div #}
+    <div id="accordionStatsDouble{{ packCounter }}" role="tablist" aria-multiselectable="true" class="panel-group">
+
+        {# Double-Beginner Accordion #}
+        {% if dBeginnerRatings > 0 %}
+            <div class="panel panel-default">
+
+                {# Clickable Heading for expanding or collapsing this score table. #}
+                <div role="tab" id="headingStatsDbeginner{{ packCounter }}" class="panel-heading">
+                    <h4 class="panel-title">
+                        <a id="collapseStatsDbeginnerAnchor{{ packCounter }}" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseStatsDbeginner{{ packCounter }}" aria-expanded="true" aria-controls="collapseStatsDbeginner{{ packCounter }}" style="width:100%;display:inline-block;" class=""><i class="fa fa-arrow-right icon-purple"></i> Double Beginner Stats</a>
+                    </h4>
+                </div>
+
+                {# The div with actual content inside the accordion. #}
+                <div id="collapseStatsDbeginner{{ packCounter }}" role="tabpanel" aria-labelledby="headingStatsDbeginner{{ packCounter }}" class="panel-collapse collapse" aria-expanded="true">
+                    <div class="panel-body">
+
+                        <center>
+                            <h4>Average Difficulty: {{ dBeginnerRatings / dBeginnerRatingArr|length }}</h4>
+                        </center>
+
+                        {# After the heading, create the table of scores. #}
+                        <table class="display" id="dStatdBeginnerTable{{ packCounter }}" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <td>Difficulty</td>
+                                    <td>Frequency</td>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for key,value in dBeginnerDiffs %}
+                                    <tr>
+                                        <td>{{ key }}</td>
+                                        <td>{{ value }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        {# Initialize the datatable. #}
+                        <script>
+                            $('#dStatdBeginnerTable{{ packCounter }}').DataTable( {
+                                "pagingType": "full_numbers"
+                            } );
+                        </script>
+
+                    </div>
+                </div>
+
+            </div>
+        {% endif %}
+
+        {# Double-Easy Accordion #}
+        {% if dEasyRatings > 0 %}
+            <div class="panel panel-default">
+
+                {# Clickable Heading for expanding or collapsing this score table. #}
+                <div role="tab" id="headingStatsDeasy{{ packCounter }}" class="panel-heading">
+                    <h4 class="panel-title">
+                        <a id="collapseStatsDeasyAnchor{{ packCounter }}" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseStatsDeasy{{ packCounter }}" aria-expanded="true" aria-controls="collapseStatsDeasy{{ packCounter }}" style="width:100%;display:inline-block;" class=""><i class="fa fa-arrow-right icon-green"></i> Double Easy Stats</a>
+                    </h4>
+                </div>
+
+                {# The div with actual content inside the accordion. #}
+                <div id="collapseStatsDeasy{{ packCounter }}" role="tabpanel" aria-labelledby="headingStatsDeasy{{ packCounter }}" class="panel-collapse collapse" aria-expanded="true">
+                    <div class="panel-body">
+
+                        <center>
+                            <h4>Average Difficulty: {{ dEasyRatings / dEasyRatingArr|length }}</h4>
+                        </center>
+
+                        {# After the heading, create the table of scores. #}
+                        <table class="display" id="dStatdEasyTable{{ packCounter }}" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <td>Difficulty</td>
+                                    <td>Frequency</td>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for key,value in dEasyDiffs %}
+                                    <tr>
+                                        <td>{{ key }}</td>
+                                        <td>{{ value }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        {# Initialize the datatable. #}
+                        <script>
+                            $('#dStatdEasyTable{{ packCounter }}').DataTable( {
+                                "pagingType": "full_numbers"
+                            } );
+                        </script>
+
+                    </div>
+                </div>
+
+            </div>
+        {% endif %}
+
+        {# Double-Medium Accordion #}
+        {% if dMediumRatings > 0 %}
+            <div class="panel panel-default">
+
+                {# Clickable Heading for expanding or collapsing this score table. #}
+                <div role="tab" id="headingStatsDmedium{{ packCounter }}" class="panel-heading">
+                    <h4 class="panel-title">
+                        <a id="collapseStatsDmediumAnchor{{ packCounter }}" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseStatsDmedium{{ packCounter }}" aria-expanded="true" aria-controls="collapseStatsDmedium{{ packCounter }}" style="width:100%;display:inline-block;" class=""><i class="fa fa-arrow-right icon-yellow"></i> Double Medium Stats</a>
+                    </h4>
+                </div>
+
+                {# The div with actual content inside the accordion. #}
+                <div id="collapseStatsDmedium{{ packCounter }}" role="tabpanel" aria-labelledby="headingStatsDmedium{{ packCounter }}" class="panel-collapse collapse" aria-expanded="true">
+                    <div class="panel-body">
+
+                        <center>
+                            <h4>Average Difficulty: {{ dMediumRatings / dMediumRatingArr|length }}</h4>
+                        </center>
+
+                        {# After the heading, create the table of scores. #}
+                        <table class="display" id="dStatdMediumTable{{ packCounter }}" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <td>Difficulty</td>
+                                    <td>Frequency</td>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for key,value in dMediumDiffs %}
+                                    <tr>
+                                        <td>{{ key }}</td>
+                                        <td>{{ value }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        {# Initialize the datatable. #}
+                        <script>
+                            $('#dStatdMediumTable{{ packCounter }}').DataTable( {
+                                "pagingType": "full_numbers"
+                            } );
+                        </script>
+
+                    </div>
+                </div>
+
+            </div>
+        {% endif %}
+
+        {# Double-Hard Accordion #}
+        {% if dHardRatings > 0 %}
+            <div class="panel panel-default">
+
+                {# Clickable Heading for expanding or collapsing this score table. #}
+                <div role="tab" id="headingStatsDhard{{ packCounter }}" class="panel-heading">
+                    <h4 class="panel-title">
+                        <a id="collapseStatsDhardAnchor{{ packCounter }}" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseStatsDhard{{ packCounter }}" aria-expanded="true" aria-controls="collapseStatsDhard{{ packCounter }}" style="width:100%;display:inline-block;" class=""><i class="fa fa-arrow-right icon-red"></i> Double Hard Stats</a>
+                    </h4>
+                </div>
+
+                {# The div with actual content inside the accordion. #}
+                <div id="collapseStatsDhard{{ packCounter }}" role="tabpanel" aria-labelledby="headingStatsDhard{{ packCounter }}" class="panel-collapse collapse" aria-expanded="true">
+                    <div class="panel-body">
+
+                        {# Heading that displays the difficulty average. #}
+                        <center>
+                            <h4>Average Difficulty: {{ dHardRatings / dHardRatingArr|length }}</h4>
+                        </center>
+
+                        {# After the heading, create the table of scores. #}
+                        <table class="display" id="dStatdHardTable{{ packCounter }}" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <td>Difficulty</td>
+                                    <td>Frequency</td>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for key,value in dHardDiffs %}
+                                    <tr>
+                                        <td>{{ key }}</td>
+                                        <td>{{ value }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        {# Initialize the datatable. #}
+                        <script>
+                            $('#dStatdHardTable{{ packCounter }}').DataTable( {
+                                "pagingType": "full_numbers"
+                            } );
+                        </script>
+
+                    </div>
+                </div>
+
+            </div>
+        {% endif %}
+
+        {# Double-Challenge Accordion #}
+        {% if dChallengeRatings > 0 %}
+            <div class="panel panel-default">
+
+                {# Clickable Heading for expanding or collapsing this score table. #}
+                <div role="tab" id="headingStatsDchallenge{{ packCounter }}" class="panel-heading">
+                    <h4 class="panel-title">
+                        <a id="collapseStatsDchallengeAnchor{{ packCounter }}" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseStatsDchallenge{{ packCounter }}" aria-expanded="true" aria-controls="collapseStatsDchallenge{{ packCounter }}" style="width:100%;display:inline-block;" class=""><i class="fa fa-arrow-right icon-blue"></i> Double Challenge Stats</a>
+                    </h4>
+                </div>
+
+                {# The div with actual content inside the accordion. #}
+                <div id="collapseStatsDchallenge{{ packCounter }}" role="tabpanel" aria-labelledby="headingStatsDchallenge{{ packCounter }}" class="panel-collapse collapse" aria-expanded="true">
+                    <div class="panel-body">
+
+                        {# Heading that displays the difficulty average. #}
+                        <center>
+                            <h4>Average Difficulty: {{ dChallengeRatings / dChallengeRatingArr|length }}</h4>
+                        </center>
+
+                        {# After the heading, create the table of scores. #}
+                        <table class="display" id="dStatdChallengeTable{{ packCounter }}" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <td>Difficulty</td>
+                                    <td>Frequency</td>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for key,value in dChallengeDiffs %}
+                                    <tr>
+                                        <td>{{ key }}</td>
+                                        <td>{{ value }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        {# Initialize the datatable. #}
+                        <script>
+                            $('#dStatdChallengeTable{{ packCounter }}').DataTable( {
+                                "pagingType": "full_numbers"
+                            } );
+                        </script>
+
+                    </div>
+                </div>
+
+            </div>
+        {% endif %}
+
+    </div>
+    {# End Double Accordion div #}
+
+{% endif %}

@@ -1,0 +1,304 @@
+{% if sBeginnerRating > 0 or sEasyRating > 0 or sMediumRating > 0 or sHardRating > 0 or sChallengeRating > 0 %}
+    <div>
+        <center>
+            <h2>
+                <i class="fa fa-arrow-left"></i>
+                <i class="fa fa-arrow-down"></i>
+                <i class="fa fa-arrow-up"></i>
+                <i class="fa fa-arrow-right"></i>
+            </h2>
+        </center>
+    </div>
+
+    {# Single Accordion div #}
+    <div id="accordionSingle" role="tablist" aria-multiselectable="true" class="panel-group">
+
+        {# Single-Beginner Accordion #}
+        {% if sBeginnerRating > 0 %}
+            <div class="panel panel-default">
+
+                {# Clickable Heading for expanding or collapsing this score table. #}
+                <div role="tab" id="headingSbeginner" class="panel-heading">
+                    <h4 class="panel-title">
+                        <a id="collapseSbeginnerAnchor" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSbeginner" aria-expanded="true" aria-controls="collapseSbeginner" style="width:100%;display:inline-block;" class=""><i class="fa fa-arrow-right icon-purple"></i> Single Beginner Scores</a>
+                    </h4>
+                </div>
+
+                {# The div with actual content inside the accordion. #}
+                <div id="collapseSbeginner" role="tabpanel" aria-labelledby="headingSbeginner" class="panel-collapse collapse" aria-expanded="true">
+                    <div class="panel-body">
+
+                        {# Heading that displays the difficulty. #}
+                        <center>
+                            <h4>Difficulty: {{ sBeginnerRating }}</h4>
+                            <h4>Notecount: {{ sBeginnerNotes }}</h4>
+                        </center>
+
+                        {# After the heading, create the table of scores. #}
+                        <table class="display" id="sBeginnerTable" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <td>Player</td>
+                                    <td>Score</td>
+                                    <td>Status</td>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for score in sBeginnerScores %}
+                                    <tr>
+                                        <td>{{ score.player }}</td>
+                                        <td>
+                                            <a href="/score/{{ score.slug }}">{{ score.scoredetails }}</a>
+                                        </td>
+                                        <td>{{ score.cleared }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        {# Initialize the datatable. #}
+                        <script>
+                            $('#sBeginnerTable').DataTable( {
+                                "pagingType": "full_numbers"
+                            } );
+                        </script>
+
+                    </div>
+                </div>
+
+            </div>
+        {% endif %}
+
+        {# Single-Easy Accordion #}
+        {% if sEasyRating > 0 %}
+            <div class="panel panel-default">
+
+                {# Clickable Heading for expanding or collapsing this score table. #}
+                <div role="tab" id="headingSeasy" class="panel-heading">
+                    <h4 class="panel-title">
+                        <a id="collapseSeasyAnchor" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSeasy" aria-expanded="true" aria-controls="collapseSeasy" style="width:100%;display:inline-block;" class=""><i class="fa fa-arrow-right icon-green"></i> Single Easy Scores</a>
+                    </h4>
+                </div>
+
+                {# The div with actual content inside the accordion. #}
+                <div id="collapseSeasy" role="tabpanel" aria-labelledby="headingSeasy" class="panel-collapse collapse" aria-expanded="true">
+                    <div class="panel-body">
+
+                        {# Heading that displays the difficulty. #}
+                        <center>
+                            <h4>Difficulty: {{ sEasyRating }}</h4>
+                            <h4>Notecount: {{ sEasyNotes }}</h4>
+                        </center>
+
+                        {# After the heading, create the table of scores. #}
+                        <table class="display" id="sEasyTable" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <td>Player</td>
+                                    <td>Score</td>
+                                    <td>Status</td>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for score in sEasyScores %}
+                                    <tr>
+                                        <td>{{ score.player }}</td>
+                                        <td>
+                                            <a href="/score/{{ score.slug }}">{{ score.scoredetails }}</a>
+                                        </td>
+                                        <td>{{ score.cleared }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        {# Initialize the datatable. #}
+                        <script>
+                            $('#sEasyTable').DataTable( {
+                                "pagingType": "full_numbers"
+                            } );
+                        </script>
+
+                    </div>
+                </div>
+
+            </div>
+        {% endif %}
+
+        {# Single-Medium Accordion #}
+        {% if sMediumRating > 0 %}
+            <div class="panel panel-default">
+
+                {# Clickable Heading for expanding or collapsing this score table. #}
+                <div role="tab" id="headingSmedium" class="panel-heading">
+                    <h4 class="panel-title">
+                        <a id="collapseSmediumAnchor" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSmedium" aria-expanded="true" aria-controls="collapseSmedium" style="width:100%;display:inline-block;" class=""><i class="fa fa-arrow-right icon-yellow"></i> Single Medium Scores</a>
+                    </h4>
+                </div>
+
+                {# The div with actual content inside the accordion. #}
+                <div id="collapseSmedium" role="tabpanel" aria-labelledby="headingSmedium" class="panel-collapse collapse" aria-expanded="true">
+                    <div class="panel-body">
+
+                        {# Heading that displays the difficulty. #}
+                        <center>
+                            <h4>Difficulty: {{ sMediumRating }}</h4>
+                            <h4>Notecount: {{ sMediumNotes }}</h4>
+                        </center>
+
+                        {# After the heading, create the table of scores. #}
+                        <table class="display" id="sMediumTable" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <td>Player</td>
+                                    <td>Score</td>
+                                    <td>Status</td>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for score in sMediumScores %}
+                                    <tr>
+                                        <td>{{ score.player }}</td>
+                                        <td>
+                                            <a href="/score/{{ score.slug }}">{{ score.scoredetails }}</a>
+                                        </td>
+                                        <td>{{ score.cleared }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        {# Initialize the datatable. #}
+                        <script>
+                            $('#sMediumTable').DataTable( {
+                                "pagingType": "full_numbers"
+                            } );
+                        </script>
+
+                    </div>
+                </div>
+
+            </div>
+        {% endif %}
+
+        {# Single-Hard Accordion #}
+        {% if sHardRating > 0 %}
+            <div class="panel panel-default">
+
+                {# Clickable Heading for expanding or collapsing this score table. #}
+                <div role="tab" id="headingShard" class="panel-heading">
+                    <h4 class="panel-title">
+                        <a id="collapseShardAnchor" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseShard" aria-expanded="true" aria-controls="collapseShard" style="width:100%;display:inline-block;" class=""><i class="fa fa-arrow-right icon-red"></i> Single Hard Scores</a>
+                    </h4>
+                </div>
+
+                {# The div with actual content inside the accordion. #}
+                <div id="collapseShard" role="tabpanel" aria-labelledby="headingShard" class="panel-collapse collapse" aria-expanded="true">
+                    <div class="panel-body">
+
+                        {# Heading that displays the difficulty. #}
+                        <center>
+                            <h4>Difficulty: {{ sHardRating }}</h4>
+                            <h4>Notecount: {{ sHardNotes }}</h4>
+                        </center>
+
+                        {# After the heading, create the table of scores. #}
+                        <table class="display" id="sHardTable" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <td>Player</td>
+                                    <td>Score</td>
+                                    <td>Status</td>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for score in sHardScores %}
+                                    <tr>
+                                        <td>{{ score.player }}</td>
+                                        <td>
+                                            <a href="/score/{{ score.slug }}">{{ score.scoredetails }}</a>
+                                        </td>
+                                        <td>{{ score.cleared }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        {# Initialize the datatable. #}
+                        <script>
+                            $('#sHardTable').DataTable( {
+                                "pagingType": "full_numbers"
+                            } );
+                        </script>
+
+                    </div>
+                </div>
+
+            </div>
+        {% endif %}
+
+        {# Single-Challenge Accordion #}
+        {% if sChallengeRating > 0 %}
+            <div class="panel panel-default">
+
+                {# Clickable Heading for expanding or collapsing this score table. #}
+                <div role="tab" id="headingSchallenge" class="panel-heading">
+                    <h4 class="panel-title">
+                        <a id="collapseSchallengeAnchor" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSchallenge" aria-expanded="true" aria-controls="collapseSchallenge" style="width:100%;display:inline-block;" class=""><i class="fa fa-arrow-right icon-blue"></i> Single Challenge Scores</a>
+                    </h4>
+                </div>
+
+                {# The div with actual content inside the accordion. #}
+                <div id="collapseSchallenge" role="tabpanel" aria-labelledby="headingSchallenge" class="panel-collapse collapse" aria-expanded="true">
+                    <div class="panel-body">
+
+                        {# Heading that displays the difficulty. #}
+                        <center>
+                            <h4>Difficulty: {{ sChallengeRating }}</h4>
+                            <h4>Notecount: {{ sChallengeNotes }}</h4>
+                        </center>
+
+                        {# After the heading, create the table of scores. #}
+                        <table class="display" id="sChallengeTable" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <td>Player</td>
+                                    <td>Score</td>
+                                    <td>Status</td>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for score in sChallengeScores %}
+                                    <tr>
+                                        <td>{{ score.player }}</td>
+                                        <td>
+                                            <a href="/score/{{ score.slug }}">{{ score.scoredetails }}</a>
+                                        </td>
+                                        <td>{{ score.cleared }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        {# Initialize the datatable. #}
+                        <script>
+                            $('#sChallengeTable').DataTable( {
+                                "pagingType": "full_numbers"
+                            } );
+                        </script>
+
+                    </div>
+                </div>
+
+            </div>
+        {% endif %}
+
+    </div>
+    {# End Single Accordion div #}
+
+{% endif %}

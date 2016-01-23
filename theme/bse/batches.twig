@@ -1,0 +1,65 @@
+{% include '_header.twig' %}
+
+<!-- Main Page Content and Sidebar -->
+
+    <!-- Main Blog Content -->
+    <div class="large-12 columns">
+        
+        {# First we'll need to query our database for all relevant batches. #}
+        {% setcontent batches = 'batches' %}
+
+        {# Row for Panel with Datatable of Batches. #}
+        <div>
+
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
+                    <i class="fa fa-list"></i> Batch Listing
+                </div>
+
+                <div class="panel-body">
+
+                    <table class="display" id="batchesTable" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <td>Batch</td>
+                                <td>Type</td>
+                                <td>Submissions</td>
+                                <td>Judgments</td>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for batch in batches %}
+                                <tr>
+                                    <td>
+                                        <a href="/batch/{{ batch.slug }}">{{ batch.title }}</a>
+                                    </td>
+                                    <td>{{ batch.batchtype }}</td>
+                                    <td>{{ batch.batchstatus }}</td>
+                                    <td>{{ batch.batchjudgments }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    {# Initialize the datatable. #}
+                    <script>
+                        $('#batchesTable').DataTable( {
+                            "pagingType": "full_numbers"
+                        } );
+                    </script>
+
+                </div> <!-- End Panel Body -->
+
+            </div>
+
+        </div>
+
+    </div>
+
+<!-- End Main Content and Sidebar -->
+
+
+
+{% include '_footer.twig' %}

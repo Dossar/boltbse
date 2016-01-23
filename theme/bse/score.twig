@@ -1,0 +1,105 @@
+{% include '_header.twig' %}
+
+<!-- Main Page Content and Sidebar -->
+
+    {% set relatedscorecontent = record.related() %}
+    {% set songtitle = "" %}
+    {% set songslug = "" %}
+    {% set packtitle = "" %}
+    {% set packslug = "" %}
+    
+    {% for relatedcontent in relatedscorecontent %}
+
+        {# Check that this is a song type. If it is, get the song name. #}
+        {% if relatedcontent.contenttype.singular_name == "Song" %}
+            {% set songtitle = relatedcontent.values.title %}
+            {% set songslug = relatedcontent.values.slug %}
+            {% set relatedsongcontent = relatedcontent.related() %}
+
+            {# Get the pack name by the song's relations. #}
+            {% for relatedstuff in relatedsongcontent %}
+                {% if relatedstuff.contenttype.singular_name == "Songpack" %}
+                    {% set packtitle = relatedstuff.values.title %}
+                    {% set packslug = relatedstuff.values.slug %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+
+    <!-- Main Blog Content -->
+    <div class="large-12 columns">
+
+        {# Row for Score Submission Details #}
+        <div>
+
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
+                    <i class="fa fa-arrow-up fa-spin"></i> Score Information
+                </div>
+
+                <div class="panel-body">
+
+                    <center>
+                        <h4>{{ record.player }}</h4>
+                        <h4>
+                            <a href="/song/{{ songslug }}">{{ songtitle }}</a>
+                        </h4>
+                        <h4>
+                            <a href="/songpack/{{ packslug }}">{{ packtitle }}</a>
+                        </h4>
+                        <h4>{{ record.scoredetails }} {{ record.cleared }}</h4>
+                        <h4>{{ record.gamemode }} {{ record.difficultymode }}</h4>
+                        <p>{{ record.scoredescription }}</p>
+                        
+                    </center>
+
+                </div> <!-- End Panel Body -->
+
+            </div>
+
+        </div>
+        
+        {# Row for Score Screenshot and/or Video. #}
+        <div>
+
+            <div class="panel panel-default">
+
+                <div class="panel-heading"><i class="fa fa-desktop"></i> Score Media</div>
+
+                <div class="panel-body">
+
+                    {# Screenshot div #}
+                    {% if record.screenshot!="" %}
+                        <div>
+                            <center>
+                                <h2><i class="fa fa-camera"></i> Screenshot</h2>
+                                <img src="/files/{{ record.screenshot }}" style="padding-bottom: 20px;">
+                            </center>
+                        </div>
+                    {% endif %}
+
+                    {# Video link div #}
+                    {% if record.videolink!="" %}
+                    <div>
+                        <center>
+                            <h2>
+                                <a href="{{ record.videolink }}"><i class="fa fa-video-camera"></i> Video Link</a>
+                            </h2>
+                        </center>
+                    </div>
+                    {% endif %}
+
+                </div> <!-- End Panel Body -->
+
+            </div>
+
+        </div>
+
+    </div>
+
+<!-- End Main Content and Sidebar -->
+
+
+
+{% include '_footer.twig' %}

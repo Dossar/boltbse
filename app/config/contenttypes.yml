@@ -1,56 +1,11 @@
 # This file defines the contenttypes on the website. See the documentation for
 # details: http://docs.bolt.cm/content#defining-contenttypes
 
-# Pages can be used for the more 'static' pages on your site. Things like
-# 'about us', 'contact' or a 'disclaimer'. This content-type has a 'templateselect'
-# field, which allows you to override the record_template setting for an
-# individual page.
-# The taxonomy for this contenttype is defined as 'chapters', which is a so-called
-# "grouping taxonomy". This way you can easily group sets of pages that logically
-# belong together. If your site has a 'services' section, in which you'd like to
-# list the different types of services a company provides, you can group these
-# together.
-
-pages:
-    name: Pages
-    singular_name: Page
-    fields:
-        title:
-            type: text
-            class: large
-            group: content
-        slug:
-            type: slug
-            uses: title
-        image:
-            type: image
-        teaser:
-            type: html
-            height: 150px
-        body:
-            type: html
-            height: 300px
-        template:
-            type: templateselect
-            filter: '*.twig'
-    taxonomy: [ chapters ]
-    recordsperpage: 100
-
-
-# Entries can be used for things like 'news' or 'blogpostings'. They have a 'teaser',
-# which can be used for a short blurb on listing-pages, allowing visitors to
-# click-through to the rest of the entry. It also has fields for an image and an
-# optional video.
-# A relation is defined to the pages contenttype. This way you can refer to a page
-# from your news-item.
-# This contenttype defines 'categories' and 'tags' as taxonomies, allowing the
-# editor to use both to categorize a specific entry.
 # The 'sort' is set to '-datepublish', which means that newer entries will be
 # shown above older entries.
-
-entries:
-    name: Entries
-    singular_name: Entry
+article:
+    name: Articles
+    singular_name: Article
     fields:
         title:
             type: text
@@ -59,129 +14,177 @@ entries:
         slug:
             type: slug
             uses: title
-        teaser:
-            type: html
-            height: 150px
         body:
             type: html
             height: 300px
-        image:
-            type: image
-            group: media
-        video:
-            type: video
-    relations:
-        pages:
-          multiple: false
-          order: title
-          label: Select a page
-    taxonomy: [ categories, tags ]
-    record_template: entry.twig
-    listing_template: listing.twig
-    listing_records: 10
+    record_template: article.twig
+    listing_template: articles.twig
+    recordsperpage: 5
     default_status: publish
     sort: -datepublish
-    recordsperpage: 10
-
-# The 'Showcases' is not particularly useful in most cases, but it does a good
-# job of showcasing most of the available fieldtypes. Feel free to delete it, or
-# copy some fields to your own contenttypes.
-# Since no templates are defined for this contenttype, the default record_template,
-# listing_template, and related settings are used from config.yml
-
-showcases:
-    name: Showcases
-    slug: showcases
-    singular_name: Showcase
-    singular_slug: showcase
+    
+# Batches represent a collection of songs.
+batches:
+    name: Batches
+    singular_name: Batch
     fields:
         title:
             type: text
-            class: large
-            required: true
-            pattern: ".{2,255}" # see: http://html5pattern.com/
-            error: "The Title field is required, and must contain at least 2 characters"
-            group: Text
+            label: Batch Name
+            postfix: e.g. Official Tournament, November 2015
+        description:
+            type: html
+            label: Batch Description
+            info: Give information on what this batch is for.
+            postfix: e.g. File Submissions from November 1st to December 31st 2015
         slug:
             type: slug
-            uses: [ title ]
-        html:
-            type: html
-            height: 150px
-        textarea:
-            type: textarea
-            postfix: "<p><em>This is a plain text area. the contents will not be processed.</em></p>"
-        markdown:
-            type: markdown
-            postfix: "<p><em>This field gets parsed as <a href='https://help.github.com/articles/markdown-basics'>Markdown</a>, when rendered on the site.</em></p>"
-        geolocation:
-            type: geolocation
-            group: Media
-        video:
-            type: video
-        image:
-            type: image
-            attrib: title # Note: retrieve this in your template with {{ record.values.image.title }}
-            extensions: [ gif, jpg, png ]
-        imagelist:
-            type: imagelist
-        file:
-            type: file
-            group: files
-        filelist:
-            type: filelist
-        checkbox:
-            type: checkbox
-            label: "This is a checkbox"
-            group: other
-        datetime:
-            type: datetime
-            default: "2000-01-01"
-            variant: inline
-        date:
-            type: date
-            default: "first day of last month"
-            variant: inline
-        integerfield:
-            type: integer
-            index: true
-        floatfield:
-            type: float
-        selectfield:
+        batchtype:
             type: select
-            values: [ none, foo, bar ]
-        multiselect:
+            values: [ Regular, Special ]
+            label: Batch Type
+        batchstatus:
             type: select
-            values: [ A-tuin, Donatello, Rafael, Leonardo, Michelangelo, Koopa, Squirtle ]
-            multiple: true
-            postfix: "Select your favourite turtle(s)."
-        selectentry:
+            values: [ Open, Closed ]
+            info: If the Batch is Closed, it is no longer accepting submissions.
+            label: Batch Status
+        batchjudgments:
             type: select
-            values: entries/id,title
-            postfix: "Select an entry"
-            autocomplete: true
-            sort: title
-        template:
-            type: templateselect
-            filter: '*.twig'
-            group: meta
-    relations:
-        entries:
-            multiple: false
-            label: "Choose an entry"
-            order: -id
-            format: "{{ item.title|escape }} <span>(№ {{ item.id }})</span>"
-            postfix: "By selecting an Entry, you're creating a bi-directional relationship to that Entry."
-        pages:
-            multiple: true
-            order: title
-            label: Select zero or more pages
-    taxonomy: [ categories, tags ]
-    show_on_dashboard: true
+            values: [ None, Partial, Done ]
+            label: Batch Judgments
+    record_template: batch.twig
+    listing_template: batches.twig
     default_status: publish
-    searchable: false
-    icon_many: "fa:cubes"
-    icon_one: "fa:cube"
+    sort: -datepublish
+    
+# Song content type. Every Song is to be attached to a Batch.
+songs:
+    name: Songs
+    singular_name: Song
+    fields:
+    
+        # Song Information
+        title:
+            type: text
+            label: Song Title
+            group: content
+        slug:
+            type: slug
+            info: The slug is to be /song/song-{id}
+            postfix: e.g. /song/song-327 if song id in URL is 327
+        artist:
+            type: text
+            label: Song Artist
+            group: content
+        stepartist:
+            type: text
+            label: Step Artist
+            group: content
+        transfer:
+            type: text
+            label: Transferred File
+            info: Leave this field blank if the file is not a transfer.
+            postfix: e.g. Yes, transferred from July 2015
+            group: content
+        filecomments:
+            type: html
+            label: File Comments
+            group: content
+            info: Any other information that would be useful for the GM Team.
+            postfix: e.g. Updated File Submission on 1/1/2016, 5:00 PM EST. Fixed a pattern 90 seconds in.
+            
+        # Permission Details
+        permission:
+            type: select
+            autocomplete: true
+            values: [ "Blanket", "Conditional", "Uncertain", "Rejected" ]
+            info: Only use Rejected if the artist requested royalties or said no. Otherwise, list it as Uncertain.
+            label: Permission Status
+            group: permission
+        permissiondetails:
+            type: html
+            label: Permission Details
+            info: Provide more details about the permission status of the song here.
+            postfix: e.g. Dossar replied with the following email stating under certain conditions we can use his music.
+            group: permission
+        permissionimage:
+            type: text
+            label: Permission Image Link
+            info: Please provide a link to the image if you can. The original permission email content is good, but an image is always good to have.
+            group: permission
+            
+    # Other configurations
+    relations:
+        batches:
+            type: select
+            autocomplete: true
+            multiple: false
+            order: title
+            label: Select Batch for this Song
+    record_template: song.twig
+    listing_template: songs.twig
+    default_status: publish
+    sort: -datepublish
+    
+# Review content type is related to a song.
+reviews:
+    name: Reviews
+    singular_name: Review
+    fields:
+    
+        # Review Judge Information
+        title:
+            type: text
+            label: Review Title
+            group: labeling
+            postfix: e.g. November 2014 Set 1 - lapis
+        slug:
+            type: slug
+            info: The slug is to be /review/review-{id}
+            postfix: e.g. /review/review-327 if song id in URL is 327
+            
+        # Judging Related Fields
+        judgelead:
+            type: text
+            label: Lead Judge
+            group: judging
+        judgereviewer:
+            type: text
+            label: Reviewer Judge
+            group: judging
+        judgenotes:
+            type: html
+            label: Judge Notes
+            info: Enter the review for the file here. HTML formatting is allowed.
+            group: judging
+        judgerating:
+            type: float
+            label: Final Judge Rating
+            group: judging
+        judgestatus:
+            type: select
+            autocomplete: true
+            label: Judging Status
+            values: [ "Released", "Accepted", "Pending Fixes", "Conditional Queue", "Resubmission", "Rejected", "Judged", "Unjudged", "Disabled" ]
+            info: Disabled means that the file is removed due to permission issues, temporarily or permanently. See permission section.
+            group: judging
+        sap:
+            type: integer
+            label: SAP
+            info: Simfile Artist Points gained (or pending to gain) from this file submission.
+
+    # Other configurations
+    relations:
+        songs:
+            type: select
+            autocomplete: true
+            multiple: false
+            order: title
+            label: Select Batch for this Song
+    record_template: song.twig
+    listing_template: songs.twig
+    default_status: publish
+    sort: -datepublish
 
 # Using YAML repeated nodes
 #
