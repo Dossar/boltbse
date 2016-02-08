@@ -12,8 +12,6 @@
 
     {# Make an array that will house the stepartist's songs. #}
     {% set stepperSongs = [] %}
-    {% set sapTotal = 0 %}
-    {% set sapPotential = 0 %}
     {% set transfers = 0 %}
     {% set normalSubs = 0 %}
     {% for song in relatedsongs %}
@@ -33,13 +31,6 @@
 
             {# Now that we have our review in a single-element array, get the judge review data. #}
             {% for review in reviewsArr %}
-                {# Check how much SAP the judge would gain from this batch. #}
-                {% if review.values.judgestatus == "Released" or
-                   review.values.judgestatus == "Accepted" or
-                   review.values.judgestatus == "Disabled" %}
-                    {% set sapTotal = sapTotal + review.values.sap %}
-                {% endif %}
-                {% set sapPotential = sapPotential + review.values.sap %}
 
                 {# Check if this file is a transfer or not. If not a transfer, it's a normal submission. #}
                 {% if song.values.transfer != "" %}
@@ -61,14 +52,12 @@
         <center>
             <h4>Normal Submissions: {{ normalSubs }}</h4>
             <h4>Transfers: {{ transfers }}</h4>
-            <h4>Current SAP Gained: {{ sapTotal }}</h4>
-            <h4>Potential SAP to Gain: {{ sapPotential }}</h4>
         </center>
 
         <div class="panel-body">
 
             {# This table displays number of songs in the batch and status. #}
-            <table class="table">
+            <table class="table table-bordered">
 
                 <thead>
                     <tr>
@@ -77,7 +66,6 @@
                         <td>Rating</td>
                         <td>Status</td>
                         <td>Transfer</td>
-                        <td>SAP</td>
                     </tr>
                 </thead>
 
@@ -105,7 +93,6 @@
                                 {% else %}
                                     <td>No</td>
                                 {% endif %}
-                                <td>{{ review.values.sap }}</td>
                             </tr>
                         {% endfor %}
                     {% endfor %}
