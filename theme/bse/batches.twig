@@ -33,7 +33,7 @@
                             {% for batch in batches %}
                                 <tr>
                                     <td>
-                                        <a href="/batch/{{ batch.slug }}">{{ batch.title }}</a>
+                                        <a href="{{ batch.link }}">{{ batch.title }}</a>
                                     </td>
                                     <td>{{ batch.batchtype }}</td>
                                     <td>{{ batch.batchstatus }}</td>
